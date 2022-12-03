@@ -4,11 +4,32 @@ on:
   push:
     branches: [ "main" ]
 jobs:
-  build:
+  changes:
     runs-on: ubuntu-latest
+    # Required permissions
+    permissions:
+      pull-requests: read
+    # Set job outputs to values from filter step
+    outputs:
+      apps: ${{steps.filter.outputs.changes}}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    # For pull requests it's not necessary to checkout the code
+    - uses: dorny/paths-filter@v2
+      id: filter
+      with:
+        filters: |
+          server: server/**
+          client: client/**
+  build:
+    needs: changes
+    runs-on: ubuntu-latest
+    if: ${{ needs.changes.outputs.apps != '[]' && needs.changes.outputs.apps != '' }}
     strategy:
       matrix:
-        app: [client, server]
+        app: ${{ fromJSON(needs.changes.outputs.apps) }}
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
