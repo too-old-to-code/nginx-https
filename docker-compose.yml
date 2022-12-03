@@ -1,0 +1,21 @@
+# Image
+version: "3.9"
+services:
+  server:
+    image: andrewt51/server
+    # build:
+      # context: ./server
+      # dockerfile: Dockerfile 
+  client:
+    image: andrewt51/client
+    # build:
+      # context: ./client
+      # dockerfile: Dockerfile 
+  reverse-proxy:
+    environment:
+      - SERVER_NAME=localhost
+      - CLIENT_PORT=80
+    restart: always
+    build: .
+    ports:
+      - "80:80"

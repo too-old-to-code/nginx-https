@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Https</title>
+</head>
+<body>
+    <h1>This is my https test</h1>
+    <button>Press me</button>
+    <span id="answer"></span>
+    <script>
+        const button = document.querySelector('button')
+        const answer = document.querySelector('#answer')
+        button.onclick = async () => {
+            const data = await fetch('/api/')
+            const text = await data.text()
+            answer.textContent = text
+        }
+    </script>
+</body>
+</html>
